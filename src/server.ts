@@ -40,6 +40,12 @@ app.use((req, res, next) => {
   next();
 });
 
+
+app.get("/test", (req, res) => {
+  res.send("Test route working!");
+});
+
+
 app.use(errorLogger);
 app.use(attachErrorMessage);
 
