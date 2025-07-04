@@ -33,27 +33,27 @@ app.use(helmet());
 // app.use(cors({ origin: config.frontendUrl, credentials: true }));
 
 
-// const allowedOrigins = [
-//   "https://festivia.jothish.online",
-//   "https://festivia-frontend.vercel.app", // for Vercel deployment
-// ];
-
-// app.use(cors({
-//   origin: (origin, callback) => {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   credentials: true,
-// }));
+const allowedOrigins = [
+  "https://festivia.jothish.online",
+  "https://festivia-frontend.vercel.app", // for Vercel deployment
+];
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
+
+// app.use(cors({
+//   origin: process.env.CLIENT_ORIGIN,
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+// }));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -81,21 +81,21 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 const httpServer = new HttpServer(app);
-const io = new SocketIOServer(httpServer, {
-  cors: {
-    origin: config.frontendUrl,
-    credentials: true,
-  },
-});
-
-
-
 // const io = new SocketIOServer(httpServer, {
 //   cors: {
-//     origin: allowedOrigins,
+//     origin: config.frontendUrl,
 //     credentials: true,
 //   },
 // });
+
+
+
+const io = new SocketIOServer(httpServer, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
+});
 
 setupSocket(io);
 
