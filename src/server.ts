@@ -37,9 +37,9 @@ const allowedOrigins = [
   "https://festivia.jothish.online",
   "https://festivia-frontend.vercel.app", // for Vercel deployment
 ];
-
 app.use(cors({
   origin: (origin, callback) => {
+    console.log("CORS origin request:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -47,7 +47,9 @@ app.use(cors({
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
+
 
 // app.use(cors({
 //   origin: process.env.CLIENT_ORIGIN,
