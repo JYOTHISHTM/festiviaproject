@@ -30,7 +30,25 @@ app.use(passport.initialize());
 
 app.use(helmet());
 
-app.use(cors({ origin: config.frontendUrl, credentials: true }));
+// app.use(cors({ origin: config.frontendUrl, credentials: true }));
+
+
+const allowedOrigins = [
+  "https://festivia.jothish.online",
+  "https://festivia-frontend.vercel.app", // for Vercel deployment
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -58,12 +76,20 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 const httpServer = new HttpServer(app);
+// const io = new SocketIOServer(httpServer, {
+//   cors: {
+//     origin: config.frontendUrl,
+//     credentials: true,
+//   },
+// });
+
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: config.frontendUrl,
+    origin: allowedOrigins,
     credentials: true,
   },
 });
+
 setupSocket(io);
 
 const startServer = async () => {
