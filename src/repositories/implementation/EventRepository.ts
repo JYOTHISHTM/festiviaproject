@@ -7,7 +7,7 @@ class EventRepository  {
 
 
   async getEventsByLocation(latitude: number, longitude: number) {
-  return await EventModel.find({
+  const event= await EventModel.find({
     geoLocation: {
       $near: {
         $geometry: {
@@ -18,6 +18,8 @@ class EventRepository  {
       }
     }
   });
+  console.log("Matched events:", event);
+
 }
 
   async getEventByIdForTicket(eventId: string) {
