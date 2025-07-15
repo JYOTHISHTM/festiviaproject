@@ -101,6 +101,7 @@ const EventSchema: Schema = new Schema(
   { timestamps: true }
 );
 
+EventSchema.index({ geoLocation: '2dsphere' });
 
 const EventModel = mongoose.model<IEvent>("Event", EventSchema);
 export default EventModel;
