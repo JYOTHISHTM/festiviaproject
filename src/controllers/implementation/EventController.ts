@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { IEventController } from '../interface/IEventController'
 import EventService from '../../services/implementation/EventService'
 import { StatusCodes } from "../../enums/StatusCodes";
+import { eventDTO } from "../../dto/eventDto"; 
+import { homeEventDTO } from "../../dto/homeEvent"; 
 
 interface AuthRequest extends Request {
   user?: {
@@ -17,7 +19,13 @@ class EventController implements IEventController {
     try {
       const events = await EventService.getHomeEvents();
 
-      res.json(events);
+     
+   const mappedEvents = Array.isArray(events)
+      ? events.map(homeEventDTO)
+      : [];
+
+    res.status(StatusCodes.OK).json(mappedEvents);
+      // res.json(events);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching home events' });
     }
@@ -35,7 +43,8 @@ class EventController implements IEventController {
       }
 
       const events = await EventService.getAllListedEvents(creatorId, page, limit);
-      res.json(events);
+       const mappedEvents = events.map(eventDTO); 
+      res.json(mappedEvents);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching events' });
     }

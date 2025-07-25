@@ -3,6 +3,7 @@ import * as service from "../../services/implementation/EventProfileService";
 import { uploadToCloudinary } from "../../middleware/creator/ProfileImage";
 import { StatusCodes } from "../../enums/StatusCodes";
 import { IEventProfileController } from "../interface/IEventProfileController";
+import { eventProfileDTO } from "../../dto/eventProfileDto";
 
 class EventProfileController implements IEventProfileController {
 
@@ -95,8 +96,9 @@ class EventProfileController implements IEventProfileController {
   async getAllPrivateCreatorsProfile(_req: Request, res: Response): Promise<void> {
     try {
       const profile = await service.getAllPrivateCreatorsData();
-      res.json(profile);
-    } catch (error) {
+ const safeProfiles = profile.map(eventProfileDTO);
+      res.json(safeProfiles);
+        } catch (error) {
       console.error("❌ Error getting profile info:", error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Failed to get profile info" });
     }

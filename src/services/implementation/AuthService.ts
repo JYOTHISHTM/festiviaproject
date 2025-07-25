@@ -44,7 +44,6 @@ class AuthService {
   const user = await repository.findByEmail(email);
   
   if (!user) {
-    console.log("❌ User not found");
     return { status: "error", message: "Invalid credentials" };
   }
   

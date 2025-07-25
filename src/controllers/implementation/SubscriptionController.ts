@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { SubscriptionService } from '../../services/implementation/SubscriptionService';
 import { SubscriptionRepository } from '../../repositories/implementation/SubscriptionRepository';
 import { StatusCodes } from "../../enums/StatusCodes";
+import { CreatorSubscriptionDTO } from '../../dto/creatorSubscriptionDto';
 
 
 
@@ -42,19 +43,36 @@ async buyUsingWallet(req: Request, res: Response) {
 
 
 
-  async getCreatorSubscription(req: Request, res: Response) {
+  // async getCreatorSubscription(req: Request, res: Response) {
+  //   try {
+  //     const creatorId = (req as any).creator.id;
+  //     const subscription = await subscriptionService.fetchCreatorSubscription(creatorId);
+  //     if (!subscription) {
+  //       return res.status(StatusCodes.OK).json(null);
+  //     }
+  //     return res.status(StatusCodes.OK).json(subscription);
+  //   } catch (err) {
+  //     console.error("Error fetching subscription:", err);
+  //     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching subscription' });
+  //   }
+  // };
+
+  async getCreatorSubscription(req: Request, res: Response): Promise<void> {
     try {
-      const creatorId = (req as any).creator.id;
+      const creatorId = (req as any).creator?.id;
       const subscription = await subscriptionService.fetchCreatorSubscription(creatorId);
-      if (!subscription) {
-        return res.status(StatusCodes.OK).json(null);
-      }
-      return res.status(StatusCodes.OK).json(subscription);
+
+      const subscriptionDto = subscription
+        ? CreatorSubscriptionDTO(subscription)
+        : null;
+
+      res.status(StatusCodes.OK).json(subscriptionDto);
+
     } catch (err) {
       console.error("Error fetching subscription:", err);
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching subscription' });
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching subscription' });
     }
-  };
+  }
 
   async getAllSubscriptionPlan(req: Request, res: Response): Promise<Response> {
     try {

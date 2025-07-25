@@ -1,7 +1,15 @@
+import mongoose, { Document } from "mongoose";
 
-import mongoose from "mongoose";
+export interface IEventProfile extends Document {
+  creator: mongoose.Types.ObjectId;
+  profileName: string;
+  profileBio: string;
+  eventCount: number;
+  eventTypes: string[];
+  profileImage: string;
+}
 
-const EventProfileSchema = new mongoose.Schema({
+const EventProfileSchema = new mongoose.Schema<IEventProfile>({
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Creator", 
@@ -15,10 +23,7 @@ const EventProfileSchema = new mongoose.Schema({
   profileImage: { type: String, default: "Profile Image" }
 });
 
-export default mongoose.model("EventProfile", EventProfileSchema);
-
-
-
+export default mongoose.model<IEventProfile>("EventProfile", EventProfileSchema);
 
 
 

@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import { IAdminController } from "../../controllers/interface/IAdminController";
 import { IAdminService } from "../../services/interface/IAdminService";
 import { StatusCodes, Messages } from "../../enums/StatusCodes";
+import { userDTO } from "../../dto/userDto";
+import { creatorDTO } from "../../dto/creatorDto";
+
 dotenv.config();
 
 class AdminController implements IAdminController {
@@ -210,24 +213,40 @@ class AdminController implements IAdminController {
     }
   }
 
-  async getUsers(req: Request, res: Response): Promise<Response> {
-    try {
-      const users = await this.adminService.getUsers();
-      return res.status(StatusCodes.OK).json(users);
-    } catch (error) {
-      console.error("Actual Error in getUsers:", error);
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        message: "Error fetching users",
-        error,
-      });
-    }
-  }
+  // async getUsers(req: Request, res: Response): Promise<Response> {
+  //   try {
+  //     const users = await this.adminService.getUsers();
+  //     return res.status(StatusCodes.OK).json(users);
+  //   } catch (error) {
+  //     console.error("Actual Error in getUsers:", error);
+  //     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  //       message: "Error fetching users",
+  //       error,
+  //     });
+  //   }
+  // }
 
+  
+async getUsers(req: Request, res: Response): Promise<Response> {
+  try {
+    const users = await this.adminService.getUsers();
+
+    const safeUsers = users.map(userDTO); // ✅ mapping raw users to safe data
+
+    return res.status(StatusCodes.OK).json(safeUsers);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    message: "Error fetching users",
+      error,
+    });
+  }
+}
 
   async getCreators(req: Request, res: Response): Promise<Response> {
     try {
       const creators = await this.adminService.getCreators();
-      return res.status(StatusCodes.OK).json(creators);
+      const safecreators = creators.map(creatorDTO); 
+      return res.status(StatusCodes.OK).json(safecreators);
     } catch (error) {
       console.error("Actual Error in getCreators:", error);
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -236,6 +255,8 @@ class AdminController implements IAdminController {
       });
     }
   }
+
+  
 
   async blockUser(req: Request, res: Response): Promise<Response> {
     try {
@@ -246,7 +267,8 @@ class AdminController implements IAdminController {
 
       return res.status(StatusCodes.OK).json({
         message: user.isBlocked ? "User blocked successfully" : "User unblocked successfully",
-        user
+        // user
+         user: userDTO(user)
       });
     } catch (error) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error updating user status", error });
@@ -262,7 +284,8 @@ class AdminController implements IAdminController {
 
       return res.status(StatusCodes.OK).json({
         message: creator.isBlocked ? "Creator blocked successfully" : "Creator unblocked successfully",
-        creator
+        // creator
+           creator: creatorDTO(creator)
       });
     } catch (error) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error updating creator status", error });
