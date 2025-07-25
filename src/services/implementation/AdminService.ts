@@ -42,6 +42,15 @@ export default class AdminService implements IAdminService {
   }
 
 
+  async getCreatorsBySearch  (search: string)  {
+  return await this.adminRepository.searchCreators(search);
+};
+
+  async getUsersbySearch  (search: string)  {
+  return await this.adminRepository.searchUsers(search);
+};
+
+
   async getSubscriptionPlan(): Promise<ISubscription[]> {
     return await this.adminRepository.getFixedSubscriptionPlan();
   }

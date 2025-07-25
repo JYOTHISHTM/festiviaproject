@@ -34,6 +34,19 @@ async updateCreatorStatusToPending(creatorId: string): Promise<any> {
     await AdminModel.updateOne({ _id: adminId }, { refreshToken: "" });
   }
 
+async searchCreators  (search: string)  {
+  const regex = new RegExp(search, "i"); 
+  return await Creator.find({
+    $or: [{ name: { $regex: regex } }, { email: { $regex: regex } }],
+  });
+};
+
+async searchUsers  (search: string)  {
+  const regex = new RegExp(search, "i"); 
+  return await Creator.find({
+    $or: [{ name: { $regex: regex } }, { email: { $regex: regex } }],
+  });
+};
   
 async deleteSubscription  (id: string)  {
   return Subscription.findByIdAndDelete(id);

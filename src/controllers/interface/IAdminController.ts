@@ -14,4 +14,6 @@ export interface IAdminController {
   reapplyCreator(req: Request, res: Response): Promise<void>
   getDashboardData(req: Request, res: Response): Promise<void>
   deleteSubscription(req: Request, res: Response): Promise<void>
+  getUsersbySearch(req: Request, res: Response): Promise<void>
+  
 }

@@ -16,6 +16,8 @@ const subscriptionController=new SubscriptionController()
 
 
 
+router.get("/creators",adminController.getCreatorsbySearch.bind(adminController));
+router.get("/users",adminController.getUsersbySearch.bind(adminController));
 
 router.get('/dashboard', adminController.getDashboardData.bind(adminController));
 router.get('/subscriptions-history', subscriptionController.getSubscriptionHistory.bind(subscriptionController));

@@ -242,6 +242,29 @@ async getUsers(req: Request, res: Response): Promise<Response> {
   }
 }
 
+ async getCreatorsbySearch(req: Request, res: Response) {
+    try {
+      const search = req.query.search?.toString() || "";
+      const creators = await this.adminService.getCreatorsBySearch(search);
+      res.status(200).json(creators);
+    } catch (error) {
+      console.error("Error fetching creators:", error);
+      res.status(500).json({ error: "Failed to fetch creators" });
+    }
+  };
+
+ async getUsersbySearch(req: Request, res: Response) {
+    try {
+      const search = req.query.search?.toString() || "";
+      const users = await this.adminService.getUsersbySearch(search);
+      res.status(200).json(users);
+    } catch (error) {
+      console.error("Error fetching creators:", error);
+      res.status(500).json({ error: "Failed to fetch creators" });
+    }
+  };
+
+
   async getCreators(req: Request, res: Response): Promise<Response> {
     try {
       const creators = await this.adminService.getCreators();

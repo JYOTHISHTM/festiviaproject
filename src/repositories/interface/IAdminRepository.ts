@@ -10,4 +10,7 @@ export interface IAdminRepository {
   getFixedSubscriptionPlan(): Promise<ISubscription[]>;
   create(data: any): Promise<any>
   deleteSubscription(id: string): Promise<any>
+    searchCreators(search:string):Promise<any>
+    searchUsers(search:string):Promise<any>
+
 }

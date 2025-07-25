@@ -11,14 +11,16 @@ export interface IAdminService {
 
   refreshToken(refreshToken: string): Promise<string | null>;
   logout(refreshToken: string): Promise<void>;
+  getCreatorsBySearch(search: string): Promise<any>
+  getUsersbySearch(search: string): Promise<any>
 
   getPendingCreators(): Promise<any>
   approveCreator(creatorId: string): Promise<any>
   rejectCreator(creatorId: string, rejectionReason: string): Promise<any>
   getCreatorStatus(creatorId: string): Promise<any>
   getSubscriptionPlan(): Promise<any>
-  createSubscription(subscriptionData:any):Promise<any>
+  createSubscription(subscriptionData: any): Promise<any>
   handleCreatorReapply(creatorId: string): Promise<any>;
   getDashboardData(): Promise<any>;
-  deleteSubscription(id:string):Promise<any>
+  deleteSubscription(id: string): Promise<any>
 }
