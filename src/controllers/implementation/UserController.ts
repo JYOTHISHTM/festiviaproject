@@ -4,6 +4,7 @@ import { IUserService } from "../../services/interface/IUserService";
 import UserService from "../../services/implementation/UserService";
 import User from "../../models/User";
 import { StatusCodes } from "../../enums/StatusCodes";
+import { userDTO } from "../../dto/userProfileDto"; 
 
 interface AuthRequest extends Request {
   user?: { id: string };
@@ -21,7 +22,9 @@ class UserController implements IUserController {
     try {
       const user = await User.findById((req as any).user.id).select("-password");
       if (!user) return res.sendStatus(StatusCodes.NOT_FOUND);
-      res.json(user);
+      const safeUser = userDTO(user);
+      // res.json(user);
+      res.json(safeUser);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Server Error" });
     }
