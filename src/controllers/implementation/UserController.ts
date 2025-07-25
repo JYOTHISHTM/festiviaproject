@@ -23,7 +23,6 @@ class UserController implements IUserController {
       const user = await User.findById((req as any).user.id).select("-password");
       if (!user) return res.sendStatus(StatusCodes.NOT_FOUND);
       const safeUser = userDTO(user);
-      // res.json(user);
       res.json(safeUser);
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Server Error" });
